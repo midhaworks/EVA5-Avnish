@@ -17,7 +17,7 @@ from tqdm import tqdm
 
 from . import torch_utils  # , google_utils
 
-matplotlib.rc('font', **{'size': 11})
+matplotlib.rc('font', **{'size': 8})
 
 # Suggest 'git pull'
 # s = subprocess.check_output('git status -uno', shell=True).decode('utf-8')
@@ -25,8 +25,8 @@ matplotlib.rc('font', **{'size': 11})
 #     print(s[s.find('Your branch is behind'):s.find('\n\n')] + '\n')
 
 # Set printoptions
-torch.set_printoptions(linewidth=320, precision=5, profile='long')
-np.set_printoptions(linewidth=320, formatter={'float_kind': '{:11.5g}'.format})  # format short g, %precision=5
+torch.set_printoptions(linewidth=200, precision=5, profile='long')
+np.set_printoptions(linewidth=200, formatter={'float_kind': '{:8.5g}'.format})  # format short g, %precision=5
 
 # Prevent OpenCV from multithreading (to use PyTorch DataLoader)
 cv2.setNumThreads(0)
