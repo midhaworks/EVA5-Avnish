@@ -72,6 +72,19 @@ walle
 As you can see in the collage image above, a lot is going on, and if you are creating a set of say 500 images, you'd get a bonanza of images via default augmentations being performed. 
 
 
+Convert Video to images:
+ffmpeg -i video.mp4 image-%03d.jpg
+
+extract audio:
+ffmpeg -i sample.mp4 -f mp3 -ab 192000 -vn audio.mp3
+
+Convert Images to Video:
+ffmpeg -i image-%03d.jpg result.mp4
+
+add audio back to the result video:
+ffmpeg -i result.mp4 -i audio.mp3 -shortest result_with_audio.mp4
+
+
 **Results**
 After training for 300 Epochs, results look awesome!
 
