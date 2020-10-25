@@ -84,6 +84,9 @@ ffmpeg -i image-%03d.jpg result.mp4
 add audio back to the result video:
 ffmpeg -i result.mp4 -i audio.mp3 -shortest result_with_audio.mp4
 
+Trained model to be downloaded in weights subfolder:
+https://drive.google.com/file/d/1QVnbRNbT7hFaj5GrWUiqTcPIahy7AVtT/view?usp=sharing
+
 
 **Results**
 After training for 300 Epochs, results look awesome!
