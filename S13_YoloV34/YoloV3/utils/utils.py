@@ -17,7 +17,7 @@ from tqdm import tqdm
 
 from . import torch_utils  # , google_utils
 
-matplotlib.rc('font', **{'size': 8})
+matplotlib.rc('font', **{'size': 11})
 
 # Suggest 'git pull'
 # s = subprocess.check_output('git status -uno', shell=True).decode('utf-8')
@@ -25,8 +25,8 @@ matplotlib.rc('font', **{'size': 8})
 #     print(s[s.find('Your branch is behind'):s.find('\n\n')] + '\n')
 
 # Set printoptions
-torch.set_printoptions(linewidth=200, precision=5, profile='long')
-np.set_printoptions(linewidth=200, formatter={'float_kind': '{:8.5g}'.format})  # format short g, %precision=5
+torch.set_printoptions(linewidth=320, precision=5, profile='long')
+np.set_printoptions(linewidth=320, formatter={'float_kind': '{:11.5g}'.format})  # format short g, %precision=5
 
 # Prevent OpenCV from multithreading (to use PyTorch DataLoader)
 cv2.setNumThreads(0)
@@ -830,12 +830,12 @@ def fitness(x):
 # Plotting functions ---------------------------------------------------------------------------------------------------
 def plot_one_box(x, img, color=None, label=None, line_thickness=None):
     # Plots one bounding box on image img
-    tl = line_thickness or round(0.0005 * (img.shape[0] + img.shape[1]) / 2) + 1  # line/font thickness
+    tl = line_thickness or round(0.002 * (img.shape[0] + img.shape[1]) / 2) + 1  # line/font thickness
     color = color or [random.randint(0, 255) for _ in range(3)]
     c1, c2 = (int(x[0]), int(x[1])), (int(x[2]), int(x[3]))
     cv2.rectangle(img, c1, c2, color, thickness=tl)
     if label:
-        tf = max(tl - 1, 0.5)  # font thickness
+        tf = max(tl - 1, 1)  # font thickness
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
         cv2.rectangle(img, c1, c2, color, -1)  # filled
