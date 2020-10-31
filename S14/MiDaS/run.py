@@ -93,7 +93,7 @@ def run(input_path, output_path, model_path):
 if __name__ == "__main__":
     # set paths
     INPUT_PATH = "../dataset/images"
-    OUTPUT_PATH = "/content/gdrive/EVA5/week14/dataset/images_depth"
+    OUTPUT_PATH = "/content/gdrive/My Drive/EVA5/week14/dataset/images_depth"
     # MODEL_PATH = "model.pt"
     MODEL_PATH = "model-f46da743.pt"
 
