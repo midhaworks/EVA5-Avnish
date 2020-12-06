@@ -76,7 +76,9 @@ b) Considered generating Planar Segmentation from Depth Images: Did come across 
 
 
 ### Work Completed:
-Attempt 1: Tried writing dynamically created model
+Attempt 1: Tried writing dynamically created model, as can be viewed here:
+https://github.com/midhaworks/EVA5-Avnish/blob/main/S15-FinalAssignment/attempt1/tricycle_net.py
+
 
 
 
