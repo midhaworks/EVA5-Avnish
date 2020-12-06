@@ -100,12 +100,32 @@ My first goal was to name the Combined Model as Tricycle net and start by integr
 
 2. Updated the implementation of convolutional layer, to also support specifying in_channels and bias values. It was particularly needed to add some encoder layers of midasnet, where in in_channels was defined.
 
+3. Created cfg file for the combined Tricycle model by the name tricycle.cfg, ensuring that MidasNet Encoder was used and separate decoders for Depth & BBox detection, taking layer definitions from respective models & ensuring overall model integrity: https://github.com/midhaworks/EVA5-Avnish/blob/main/S15-FinalAssignment/Tricycle/cfg/tricycle.cfg
+
+4. Wrote a function to load model weights from pretrained MidasNet & Customized YoloV3 models, Darknet->load_weights() function in models.py: https://github.com/midhaworks/EVA5-Avnish/blob/main/S15-FinalAssignment/Tricycle/models.py
+
+Please note that while writing and testing the tricycle.cfg, most layers compatibility issues were resolved and also the model designed such that enough capacity was ensured (similar to base model) to ensure equivalent learning of features. Also, remaining 1 or 2 compatibility issues were resolved when testing the load_weights() function as weights data won't match if layers had different size.
+
+The updated code for the combined layer is available here: https://github.com/midhaworks/EVA5-Avnish/tree/main/S15-FinalAssignment/Tricycle
+
+Notebook making use of this model and displaying the Model Summary and Children, apart from saving the weights of the New Model: https://github.com/midhaworks/EVA5-Avnish/blob/main/S15-FinalAssignment/ModelsSummary.ipynb
+
+
+## Achievements:
+1. Learned how to generate additional training data for combined models to learn.
+
+2. Learned the Darknet Coding & Configuration Framework, which i believe can be used further as a framework to define and create new Models, and it may be of major use if one wants to configure and test a number of configurations overnight or over a duration automatically, to be run based on a number of configuration files provided to the program to load, train and generate report.
+
+3. Transfer Learning learned in detail. Completed Integration of MidasNet & YoloV3 successfully also ensuring that the Darknet Framework was re-used and enhanced, so it can be easily be used to further add PlaneRCNN Layers and trained further to create the final Model. Shall be training the model further to generate bbox and depth images effectively. And further to add MaskRCNN layers (to avoid dependency issues with PlaneRCNN) for Plane Segmentation, if that's ok.
+
+## Learnings:
+1. Lack of experience and skills with Pytorch, Transfer Learning initially caused delays for me to start, despite keen interest. However, having gone through the source code and understanding each of the models in detail was key here, which i could better imagine after having searched for many more articles on YoloV3, and once the code was understood better, it has given me good confidence, where in pytorch skills really did not matter much, could figure out those aspects quickly once the framework was in mind that worked! Learning here was to delve into model code and understanding structure of the model in detail is key, and next time i should focus on that aspect early on to complete the work at hand faster.
+
+2. Been stretched on time due to my startup's work that is also demanding in these weeks. It was a bit stressful not being able to progress as i had no idea how transfer learning was done, that too for such complex models like YoloV3 & PlaneRCNN. May be some basic training / coding assignments upfront on how weights are transferred or how models can be reused from other models, etc could have been useful to show the way forward. Somehow during these weeks, the entire group became uncommunicative, may be because it was an individual assignment, but had group members been communicative or helpful to others to share how these basic things are done (like custom model creation or transferring weights), it could have helped other members to get started earlier on & done much more.   
 
 
 
 
-
-Hence, i started to enhance the YoloV3 code to support some of these building blocks as available module types that one can use. As a result, i added support for following module types in 
 
 
 
