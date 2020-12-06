@@ -80,12 +80,25 @@ b) Considered generating Planar Segmentation from Depth Images: Did come across 
 #### First tried writing dynamically created model, made 2 attempts for the same:
 
 Attempt 1: Tried writing dynamically created model by having the 3 pretrained models as member variables:
-https://github.com/midhaworks/EVA5-Avnish/blob/main/S15-FinalAssignment/attempt1/tricycle_net_attempt1.py
+https://github.com/midhaworks/EVA5-Avnish/blob/main/S15-FinalAssignment/attempts/tricycle_net_attempt1.py
 
-Could not figure out if this will work, also yolov3 model had yolo_layers a little above and those were not reflecting here.
+Could not figure out if this will work, got blocked by the YoloV3 forward pass where in some Yolo model layers required passing the outputs array. This also complicated matters as looking at YoloV3 code it appeared quite complex.
 
 Attemp 2:
+https://github.com/midhaworks/EVA5-Avnish/blob/main/S15-FinalAssignment/attempts/tricycle_net.py
 
+This approach was about not having the base models as member variables and instead have them as function paramters so they don't show up fully under model summary or model children and only relevant layers get used /shown. However, this approach also got stuck due to complexity of YoloV3 forward pass which had multiple arrays being tracked, yolo_layers and out array and then some layers required outputs to be passed. Please note that this analysis was before fully understanding the YoloV3 code structure. Next step changed my perception about the YoloV3 code completely.
+
+#### Final Attempt:
+Having done some more reading out YoloV3 and how it can be customised, came across this very descriptive article: programmersought.com/article/97114912009/
+
+Along with this article, having studied the cfg file & it's source code as well, it started to develop my liking and interest towards this code structure and the possibility of using the same for the capstone project as it offered good flexibility to define routes and shortcuts and provided some required building blocks as well. However, having reviewed MidasNet and PlaneRCNN it was quite evident that i will need to add some more building blocks to YoloV3 code such that the config file will be able to take those building blocks as valid blocks for any given model being defined.
+
+My first goal was to name the Combined Model as Tricycle net and start by integrating MidasNet layers with YoloV3 (as they had no dependency issues). Having worked on the code, i ended up making following improvements to the Yolo V3 code:
+
+1. Updated the cfg code to support definition of high level layers viz. 4 main layers of resnext101 (resnext101_layer1, resnext101_layer2, resnext101_layer3, resnext101_layer4) and MidasDecoder (defined as a new Module). Associated parameters like pretrained, features, non_negative also added in supported list of features in parse_config.py
+
+2. Updated the implementation of convolutional layer, to also support specifying in_channels and bias values. It was particularly needed to add some encoder layers of midasnet, where in in_channels was defined.
 
 
 
