@@ -76,9 +76,15 @@ b) Considered generating Planar Segmentation from Depth Images: Did come across 
 
 
 ### Work Completed:
-Attempt 1: Tried writing dynamically created model, as can be viewed here:
-https://github.com/midhaworks/EVA5-Avnish/blob/main/S15-FinalAssignment/attempt1/tricycle_net.py
 
+#### First tried writing dynamically created model, made 2 attempts for the same:
+
+Attempt 1: Tried writing dynamically created model by having the 3 pretrained models as member variables:
+https://github.com/midhaworks/EVA5-Avnish/blob/main/S15-FinalAssignment/attempt1/tricycle_net_attempt1.py
+
+Could not figure out if this will work, also yolov3 model had yolo_layers a little above and those were not reflecting here.
+
+Attemp 2:
 
 
 

@@ -48,6 +48,7 @@ class TricycleNet(BaseModel):
 
         self.encoder = midas_model.pretrained
         self.depth_decoder = midas_model.scratch
+        self.depth_output = midas_model.output_conv
         self.bbox_decoder = torch.nn.Sequential(
             yolov3_model.module_list[99],
             yolov3_model.module_list[100],
@@ -67,29 +68,6 @@ class TricycleNet(BaseModel):
         )
 
 
-        # load network
-        self.midas_model = MidasNet(MIDAS_MODEL_PATH, non_negative=True)
-        self.midas_model.to(device)
-        #print(model.children())
-        #print(model)
-        #summary(self.midas_model, (3,224, 224))
-
-        img_size = (3, 224, 224)
-        self.yolov3_model = Darknet(YOLOV3_CONFIG_PATH, img_size)
-
-        self.yolov3_model.to(device)
-        #summary(self.yolov3_model, (3,224,224))
-
-        # Load weights
-        attempt_download(YOLOV3_MODEL_PATH)
-        if YOLOV3_MODEL_PATH.endswith('.pt'):  # pytorch format
-            self.yolov3_model.load_state_dict(torch.load(YOLOV3_MODEL_PATH, map_location=device)['model'])
-        else:  # darknet format
-            load_darknet_weights(self.yolov3_model, YOLOV3_MODEL_PATH)
-
-        # Eval mode
-        #yolov3_model.to(device).eval()
-
 
 
     def forward(self, x):
@@ -102,24 +80,10 @@ class TricycleNet(BaseModel):
             tensor: depth
         """
         out = []
-        encoder_layer_1 = self.midas_model.pretrained.layer1(x)
-        encoder_layer_2 = self.midas_model.pretrained.layer2(encoder_layer_1)
-        encoder_layer_3 = self.midas_model.pretrained.layer3(encoder_layer_2)
-        encoder_layer_4 = self.midas_model.pretrained.layer4(encoder_layer_3)
+        x = self.encoder(x)
+        x = self.depth_decoder(x)
 
-        
-        # Decoder 1 for generating Depth Images
-        decoder1_layer_1_rn = self.midas_model.scratch.layer1_rn(encoder_layer_1)
-        decoder1_layer_2_rn = self.midas_model.scratch.layer2_rn(encoder_layer_2)
-        decoder1_layer_3_rn = self.midas_model.scratch.layer3_rn(encoder_layer_3)
-        decoder1_layer_4_rn = self.midas_model.scratch.layer4_rn(encoder_layer_4)
-
-        decoder1_path_4 = self.midas_model.scratch.refinenet4(decoder1_layer_4_rn)
-        decoder1_path_3 = self.midas_model.scratch.refinenet3(decoder1_path_4, decoder1_layer_3_rn)
-        decoder1_path_2 = self.midas_model.scratch.refinenet2(decoder1_path_3, decoder1_layer_2_rn)
-        decoder1_path_1 = self.midas_model.scratch.refinenet1(decoder1_path_2, decoder1_layer_1_rn)
-
-        decoder1_out = self.midas_model.scratch.output_conv(decoder1_path_1)
+        decoder1_out = self.depth_output(x)
 
         depth_out = torch.squeeze(decoder1_out, dim=1)
 
