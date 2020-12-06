@@ -24,4 +24,70 @@ For this purpose, it was required to generate data for training the model for de
 
 ffmpeg -i DESIGNERVILLA.mp4 -r 1 ../interiors/int%04d.png
 
-Additional images generated are stored here: 
+5000+ images created from videos are stored here: 
+https://drive.google.com/drive/folders/1EC8OrgCg0FZRWLWTvv2fzd75zzMFh-h_?usp=sharing
+
+Based on these images, MidasNet was run on the images to generare corresponding depth images, that can serve as additional ground data for training the model for depth. 
+
+Additional 5000+ depth images are stored here:
+https://drive.google.com/drive/folders/127Ax6rktMwsdAfBAN6zwil0lJd9KLd4V?usp=sharing
+
+
+Also PlaneRCNN model was run on these 5000+ images to generate corresponding planer images.
+
+Additional 5000+ Planer images generated are stored here:
+https://drive.google.com/drive/folders/1bifHkBqyP_x4_mXHY1d8AzEt8FqcWZMe?usp=sharing
+
+Overall Data is stored here:
+https://drive.google.com/drive/folders/1KMyWDwS76VVK5A9yiIAlwPNO2I3Dn-yA?usp=sharing
+
+### Study & Analysis of the 3 models:
+As a next step before planning transfer learning, it was important to understand the 3 models & their respectiev code base.
+
+Here, i tried to look at the Model Summary & print the Model Children, as well as tried to visualize the interconnections between various modules within the model using external libraries like torchviz.
+
+The notebook to visualize the models can be seen here: 
+https://colab.research.google.com/drive/1x0YbgcNUk3OQ7P5Mv08CbSmVD0Lh_5gU?usp=sharing
+
+Note: While the above ModelSummary.ipynb was used to study and analyse the model, it was also used to experiment and visualise the combined model, named as tricycle_model in the code above. More about the model is explained in next section.
+
+Please ntoe that the entire work area was kept in gdrive:
+https://drive.google.com/drive/folders/1oxMv0hdsHfwIJbx0eONKuDCwY4czTViJ?usp=sharing
+
+#### Findings from Model Study:
+
+1. The first thing that came to my mind was to view the models structure and try and define a custom model that would just take specific layers from the 3 preloaded models (MidasNet, YoloV3, PlaneRCNN). My first attempt was to try out visualising the models and to try and write that custom model. However, there were challenges faced when trying to load the 3 models and take bits and pieces from each model, the main problem here was my lack of skills and experience with PyTorch and be able to figure out how a custom model of this order (with 3 outcomes) is defined  & how various pieces could be frozen. While googling, i could find a number of articles showing how transfer learning is applied to a model to just change the last couple of layers, there was no such extensive/complex example available on the internet. 
+
+Hence, i even tried formally leanring pytorch by going through all the documentation available o pytorch site, however, these documentations / training material also remained quite high level and did not delve into complex examples! However, after lot of reading & failed trials that resulted in custom model picking up the entire base models (Yolo, MidasNet, PlaneRCNN) as their children (based on how i was defining it), did click an idea of defining the model dynamically using a method, that takes instances of these base models and starts adding specific layers from these base model to a new Module instance, and then returns the Module (or model) thus created. While this was a very good idea, what was not clear was how i could define forward method for such a dynamically created model such that it generated 3 outcomes! Somehow, the complexity of the model kept keeping me at bay to move forward as thinking about the complex task ahead & whether i was going to hit a roadblock was a concern!
+
+2. **bold The Yolo V3 model which was based on Darknet coding framework is a very well written & modular code. The concept of using config file (cfg) to define a model is very good, one that can be used to define a model quickly & the code is written such that it will continue to work without any change as far as the underlying components are adhered to while defining the model i.e. as far as one uses the predefined types, like convolutional, route, shortcut, maxpool, etc. ** Hence, it really interested me a lot to reuse this code structure and config mechanism, as it gives lot of flexibility to try out just about any model type in future, as we keep adding more supported module types to it. The best part here was that we could clearly define any route or shortcut, something that could be used to carry forward layers to later layers, like in attention mechanism. And more importantly, it suited our purpose to define 3 routes from the same encoder!!!!
+
+Found this very good write up that explained the YoloV3 Model and source structure really well, though it shows YoloMini model, it could be easily related to main model: programmersought.com/article/97114912009/
+
+2. However, looking at the MidasNet model & source code it was found that it had some sub-modules that may not be available in the Yolov3 config mechanism. Hence, it was required to enhance the YoloV3 model to support these additional building blocks if we were to use the YoloV3 framework to code the Combined Model.
+
+3. PlaneRCNN source code though good, was outdated as it was using pieces that no longer worked in latest cuda version and also required compiling some libraries using C/C++ compilers. It was quite a challenge to get this code compiled and running. Given the amount of time i spent to get this working and the fact that i was still not able to get all the 3 Models running in a single setup, as MidasNet and YoloV3 had dependency on latest features which were not available in PlaneRCNN setup, i was seriously considering finding alternatives to PlaneRCNN, one that could be equally effective in generating Plane segmentation images and not have the dependency challenges associated with it. Based on the reading, i did come across interchangeable approaches like: 
+
+a) MaskRCNN: 
+https://www.analyticsvidhya.com/blog/2019/07/computer-vision-implementing-mask-r-cnn-image-segmentation/
+https://github.com/matterport/Mask_RCNN
+
+b) Considered generating Planar Segmentation from Depth Images: Did come across an interesting implementation (that did not require a separate network, but could reuse depth images to generate planer images), shall find the link again and update, somehow i had to restart my Macbook due to memory issues and lost the open link.
+
+
+### Work Completed:
+Attempt 1: Tried writing dynamically created model
+
+
+
+
+
+
+
+Hence, i started to enhance the YoloV3 code to support some of these building blocks as available module types that one can use. As a result, i added support for following module types in 
+
+
+
+
+
+

@@ -1,4 +1,0 @@
-hardhat
-mask
-vest
-boots
