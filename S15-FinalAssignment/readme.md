@@ -19,6 +19,24 @@ We need to use Transfer Learning to come up with a single Model that can generat
 
 ## Solution:
 
+### Code Structure:
+https://github.com/midhaworks/EVA5-Avnish/tree/main/S15-FinalAssignment
+
+ModelSummary.ipynb: Notebook showing the details of the 3 Base Models and the newly created combined model Tricycle. Also, Tricycle Model also saves the weights for itself after having loaded weights of each of it's layers from the base model.
+
+MiDas - Folder containing MiDasNet code.
+
+planercnn - Fodler containing PlaneRCNN code.
+
+YoloV3 - Folder containing YoloV3 code.
+
+Tricycle - Folder containing the code of the combined model. It has been named as Tricycle, as it has 3 wheels - relating to 3 outcomes & the state :)
+
+attempts - The folder contains source code of the previous attempts made to defined a combined model
+
+data - folder contains some base data, but for overall data, please refer the gdrive link (as not all data can be added to github due to data limit) - https://drive.google.com/drive/folders/1KMyWDwS76VVK5A9yiIAlwPNO2I3Dn-yA?usp=sharing
+
+
 ### First Step: Generate more data, as 3000 images will not be sufficient.
 For this purpose, it was required to generate data for training the model for depth and planer surfaces. Hence, relevant videos were downloaded from youtube that just had interiors of the house/offices shown without any person in it. Using the videos, images were generared using ffmpeg to extract an image every second. Sample command used to generate images from video:
 
