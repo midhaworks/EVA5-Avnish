@@ -8,7 +8,7 @@ the model can generate:
 
 1. Bounding Boxes on the Image, highlighting Mask, Vest, Boots & Hardhat
 2. Depth Image
-3. Planer Surface Image, or Segmentation Image
+3. Planer Surface Image, or Plane Segmentation Image
 
 We already have 3 models, with each of them achieving one purpose as follows:
 Customized YoloV3 is trained to generate images with bounding boxes for Masks, Vests, Boots & Hardhat.
