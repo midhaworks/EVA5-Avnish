@@ -30,7 +30,7 @@ planercnn - Fodler containing PlaneRCNN code.
 
 YoloV3 - Folder containing YoloV3 code.
 
-Tricycle - Folder containing the code of the combined model. It has been named as Tricycle, as it has 3 wheels - relating to 3 outcomes & the state :)
+Tricycle - Folder containing the code of the combined model. It has been named as Tricycle, as it has 3 wheels - relating to 3 outcomes & given that i have just started to learn Transfer Learning & it is first such model (like we start with tricycle to further graduate to riding a cycle, bike and so on) :)
 
 attempts - The folder contains source code of the previous attempts made to defined a combined model
 
