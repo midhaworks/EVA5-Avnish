@@ -123,6 +123,10 @@ My first goal was to name the Combined Model as Tricycle net and start by integr
 
 4. Wrote a function to load model weights from pretrained MidasNet & Customized YoloV3 models, Darknet->load_weights() function in models.py: https://github.com/midhaworks/EVA5-Avnish/blob/main/S15-FinalAssignment/Tricycle/models.py
 
+5. Wrote a recursive function to freeze/unfreeze layers within a given module, named DarkNet->layer_freeze(self, model, freeze). Under Tricycle/models.py
+
+6. Wrote a helper function to freeze/unfreeze sections of the Tricycle model. Various sections like, encoder, depth decoder, bbox decoder & planer decoder. Function DarkNet->freeze_sections(self, encoder_grad, depth_decoder_grad, bbox_decoder_grad, planer_decoder_grad) under Tricycle/models.py.
+
 Please note that while writing and testing the tricycle.cfg, most layers compatibility issues were resolved and also the model designed such that enough capacity was ensured (similar to base model) to ensure equivalent learning of features. Also, remaining 1 or 2 compatibility issues were resolved when testing the load_weights() function as weights data won't match if layers had different size.
 
 The updated code for the combined layer is available here: https://github.com/midhaworks/EVA5-Avnish/tree/main/S15-FinalAssignment/Tricycle
