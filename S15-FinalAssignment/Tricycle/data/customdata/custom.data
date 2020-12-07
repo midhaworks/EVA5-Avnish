@@ -1,0 +1,4 @@
+classes=4
+train=train.txt
+valid=test.txt
+names=custom.names

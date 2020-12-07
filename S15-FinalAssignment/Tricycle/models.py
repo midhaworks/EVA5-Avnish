@@ -1,8 +1,9 @@
-from .utils.google_utils import *
-from .utils.layers import *
-from .utils.parse_config import *
+
+from Tricycle.utils.google_utils import *
+from Tricycle.utils.layers import *
+from Tricycle.utils.parse_config import *
 # from .blocks import FeatureFusionBlock, Interpolate 
-from .midas_blocks import _make_pretrained_resnext101_wsl, _make_midas_decoder, MidasDecoder
+from Tricycle.midas_blocks import _make_pretrained_resnext101_wsl, _make_midas_decoder, MidasDecoder
 
 ONNX_EXPORT = False
 
@@ -495,7 +496,6 @@ class Darknet(nn.Module):
 
 def get_yolo_layers(model):
     return [i for i, m in enumerate(model.module_list) if m.__class__.__name__ == 'YOLOLayer']  # [89, 101, 113]
-
 
 
 

@@ -1,6 +1,6 @@
 import torch.nn.functional as F
 
-from YoloV3.utils.utils import *
+from Tricycle.utils.utils import *
 
 
 def make_divisible(v, divisor):
