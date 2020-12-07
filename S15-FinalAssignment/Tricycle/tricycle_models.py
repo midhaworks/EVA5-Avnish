@@ -382,22 +382,25 @@ class Darknet(nn.Module):
         torch_utils.model_info(self, verbose)
 
     def load_weights(self, preloaded_midasnet, preloaded_yolov3):
+
+        # MidasNet Encoder updates
         self.module_list[0].load_state_dict(preloaded_midasnet.pretrained.layer1.state_dict())
         self.module_list[1].load_state_dict(preloaded_midasnet.pretrained.layer2.state_dict())
         self.module_list[2].load_state_dict(preloaded_midasnet.pretrained.layer3.state_dict())
         self.module_list[3].load_state_dict(preloaded_midasnet.pretrained.layer4.state_dict())
-
         self.module_list[5].Conv2d.weight.data = preloaded_midasnet.scratch.layer1_rn.weight.data
         self.module_list[7].Conv2d.weight.data = preloaded_midasnet.scratch.layer2_rn.weight.data
         self.module_list[9].Conv2d.weight.data = preloaded_midasnet.scratch.layer3_rn.weight.data
         self.module_list[11].Conv2d.weight.data = preloaded_midasnet.scratch.layer4_rn.weight.data
 
+        # MidasNet Decoder updates
         self.module_list[12].refinenet4.load_state_dict(preloaded_midasnet.scratch.refinenet4.state_dict())
         self.module_list[12].refinenet3.load_state_dict(preloaded_midasnet.scratch.refinenet3.state_dict())
         self.module_list[12].refinenet2.load_state_dict(preloaded_midasnet.scratch.refinenet2.state_dict())
         self.module_list[12].refinenet1.load_state_dict(preloaded_midasnet.scratch.refinenet1.state_dict())
         self.module_list[12].output_conv.load_state_dict(preloaded_midasnet.scratch.output_conv.state_dict())
 
+        # YoloV3 Decoder updates
         self.module_list[14].load_state_dict(preloaded_yolov3.module_list[77].state_dict())
         self.module_list[21].load_state_dict(preloaded_yolov3.module_list[84].state_dict())
         self.module_list[22].load_state_dict(preloaded_yolov3.module_list[85].state_dict())
@@ -408,8 +411,7 @@ class Darknet(nn.Module):
         self.module_list[27].load_state_dict(preloaded_yolov3.module_list[90].state_dict())
         self.module_list[28].load_state_dict(preloaded_yolov3.module_list[91].state_dict())
         self.module_list[29].load_state_dict(preloaded_yolov3.module_list[92].state_dict())
-        self.module_list[30].load_state_dict(preloaded_yolov3.module_list[93].state_dict())
-        
+        self.module_list[30].load_state_dict(preloaded_yolov3.module_list[93].state_dict())        
         self.module_list[31].load_state_dict(preloaded_yolov3.module_list[94].state_dict())
         self.module_list[32].load_state_dict(preloaded_yolov3.module_list[95].state_dict())
         self.module_list[33].load_state_dict(preloaded_yolov3.module_list[96].state_dict())
@@ -432,6 +434,62 @@ class Darknet(nn.Module):
         self.module_list[50].load_state_dict(preloaded_yolov3.module_list[113].state_dict())
        
         
+    def layer_freeze(self, model, freeze):
+        for name, child in model.named_children():
+            for param in child.parameters():
+                param.requires_grad = freeze
+            self.layer_freeze(child, freeze)
+
+    def freeze_sections(self, encoder_grad, depth_decoder_grad, bbox_decoder_grad, planer_decoder_grad):
+        # MidasNet Encoder updates
+        self.layer_freeze(self.module_list[0], encoder_grad)
+        self.layer_freeze(self.module_list[1], encoder_grad)
+        self.layer_freeze(self.module_list[2], encoder_grad)
+        self.layer_freeze(self.module_list[3],encoder_grad)
+        self.layer_freeze(self.module_list[5], encoder_grad)
+        self.layer_freeze(self.module_list[7], encoder_grad)
+        self.layer_freeze(self.module_list[9], encoder_grad)
+        self.layer_freeze(self.module_list[11], encoder_grad)
+        
+        # MidasNet Decoder updates
+        self.layer_freeze(self.module_list[12].refinenet4, depth_decoder_grad)
+        self.layer_freeze(self.module_list[12].refinenet3, depth_decoder_grad)
+        self.layer_freeze(self.module_list[12].refinenet2, depth_decoder_grad)
+        self.layer_freeze(self.module_list[12].refinenet1, depth_decoder_grad)
+        self.layer_freeze(self.module_list[12].output_conv, depth_decoder_grad)
+
+        # YoloV3 Decoder updates
+        self.layer_freeze(self.module_list[14], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[21], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[22], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[23], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[24], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[25], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[26], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[27], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[28], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[29], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[30], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[31], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[32], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[33], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[34], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[35], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[36], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[37], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[38], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[39], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[40], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[41], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[42], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[43], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[44], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[45], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[46], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[47], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[48], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[49], bbox_decoder_grad)
+        self.layer_freeze(self.module_list[50], bbox_decoder_grad)
 
 
 
